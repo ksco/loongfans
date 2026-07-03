@@ -81,16 +81,12 @@ export function getLocalePrefix(localeIndex: string): string {
  * 根据语言偏好进行首次访问的重定向，只在首次访问时调用
  */
 export function handleFirstVisitRedirect(router: Router) {
-  let storedLang = getStoredLanguage()
-
-  if (!storedLang) {
+  if (!getStoredLanguage()) {
     const lang = navigator.language
     const defaultLang = detectBrowserLanguage(lang)
     setStoredLanguage(defaultLang)
-    storedLang = defaultLang
+    router.go(getLocaleUrl(defaultLang, router.route.path))
   }
-
-  router.go(getLocaleUrl(storedLang as SupportedLanguage, router.route.path))
 }
 
 /**
